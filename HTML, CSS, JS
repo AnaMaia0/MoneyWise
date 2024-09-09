@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoneyWise - Planejamento e Controle Financeiro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        header {
+            background-color: #00796b;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 10px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
+        section {
+            margin: 20px;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        #graphs {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        canvas {
+            width: 300px;
+            height: 300px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #00796b;
+            color: white;
+            position: relative;
+            width: 100%;
+            bottom: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <h1>MoneyWise</h1>
+        <nav>
+            <ul>
+                <li><a href="#dashboard">Dashboard</a></li>
+                <li><a href="#budget">Orçamento</a></li>
+                <li><a href="#goals">Metas Financeiras</a></li>
+                <li><a href="#investments">Investimentos</a></li>
+                <li><a href="#reports">Relatórios</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Dashboard -->
+    <section id="dashboard">
+        <h2>Resumo Financeiro</h2>
+        <div id="account-summary">
+            <p>Saldo Total: <span id="total-balance">$0</span></p>
+            <p>Receitas: <span id="income">$0</span></p>
+            <p>Despesas: <span id="expenses">$0</span></p>
+        </div>
+        <div id="graphs">
+            <canvas id="cashflow-chart"></canvas>
+            <canvas id="expense-chart"></canvas>
+        </div>
+        <div id="alerts">
+            <h3>Notificações</h3>
+            <ul id="notifications-list"></ul>
+        </div>
+    </section>
+
+    <!-- Budget Management -->
+    <section id="budget">
+        <h2>Gerenciamento de Orçamento</h2>
+        <div id="budget-summary">
+            <form id="category-form">
+                <label for="category">Categoria:</label>
+                <input type="text" id="category" placeholder="Ex: Alimentação">
+                <label for="limit">Limite:</label>
+                <input type="number" id="limit" placeholder="Valor em $">
+                <button type="submit">Adicionar Categoria</button>
+            </form>
+            <div id="category-list"></div>
+        </div>
+    </section>
+
+    <!-- Financial Goals -->
+    <section id="goals">
+        <h2>Planejamento de Metas</h2>
+        <form id="goal-form">
+            <label for="goal-name">Meta:</label>
+            <input type="text" id="goal-name" placeholder="Ex: Economizar para viagem">
+            <label for="goal-amount">Valor Alvo:</label>
+            <input type="number" id="goal-amount" placeholder="Valor em $">
+            <label for="goal-deadline">Prazo:</label>
+            <input type="date" id="goal-deadline">
+            <button type="submit">Criar Meta</button>
+        </form>
+        <div id="goal-progress"></div>
+    </section>
+
+    <!-- Investment Tools -->
+    <section id="investments">
+        <h2>Ferramentas de Investimento</h2>
+        <div id="investment-simulator">
+            <h3>Simulador de Investimentos</h3>
+            <form id="investment-form">
+                <label for="initial-investment">Aporte Inicial:</label>
+                <input type="number" id="initial-investment">
+                <label for="rate">Taxa de Retorno (%):</label>
+                <input type="number" id="rate">
+                <label for="frequency">Frequência de Aporte:</label>
+                <input type="text" id="frequency" placeholder="Mensal, Anual...">
+                <button type="submit">Simular</button>
+            </form>
+            <div id="simulation-result"></div>
+        </div>
+    </section>
+
+    <!-- Financial Reports -->
+    <section id="reports">
+        <h2>Relatórios Financeiros</h2>
+        <button id="export-pdf">Exportar PDF</button>
+        <button id="export-excel">Exportar Excel</button>
+        <div id="report-data"></div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 MoneyWise. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Função exemplo para carregar dados do dashboard
+            function loadDashboardData() {
+                document.getElementById('total-balance').textContent = "$5000";
+                document.getElementById('income').textContent = "$2000";
+                document.getElementById('expenses').textContent = "$1500";
+            }
+
+            // Inicializar dashboard
+            loadDashboardData();
+
+            // Função exemplo para adicionar categoria de orçamento
+            function addCategory(event) {
+                event.preventDefault();
+                const category = document.getElementById("category").value;
+                const limit = document.getElementById("limit").value;
+                const categoryList = document.getElementById("category-list");
+                const newCategory = document.createElement("div");
+                newCategory.textContent = `Categoria: ${category}, Limite: $${limit}`;
+                categoryList.appendChild(newCategory);
+            }
+
+            // Função exemplo para criar meta financeira
+            function createGoal(event) {
+                event.preventDefault();
+                const goalName = document.getElementById("goal-name").value;
+                const goalAmount = document.getElementById("goal-amount").value;
+                const goalDeadline = document.getElementById("goal-deadline").value;
+                const goalProgress = document.getElementById("goal-progress");
+                const newGoal = document.createElement("div");
+                newGoal.textContent = `Meta: ${goalName}, Valor Alvo: $${goalAmount}, Prazo: ${goalDeadline}`;
+                goalProgress.appendChild(newGoal);
+            }
+
+            // Função exemplo para simular investimento
+            function simulateInvestment(event) {
+                event.preventDefault();
+                const initialInvestment = document.getElementById("initial-investment").value;
+                const rate = document.getElementById("rate").value;
+                const frequency = document.getElementById("frequency").value;
+                const simulationResult = document.getElementById("simulation-result");
+                simulationResult.textContent = `Simulação de Investimento - Aporte Inicial: $${initialInvestment}, Taxa: ${rate}%, Frequência: ${frequency}`;
+            }
+
+            // Função exemplo para exportar relatórios para PDF
+            function exportToPDF() {
+                alert("Exportando relatório para PDF...");
+            }
+
+            // Função exemplo para exportar relatórios para Excel
+            function exportToExcel() {
+                alert("Exportando relatório para Excel...");
+            }
+
+            // Eventos dos formulários e botões
+            document.getElementById("category-form").addEventListener("submit", addCategory);
+            document.getElementById("goal-form").addEventListener("submit", createGoal);
+            document.getElementById("investment-form").addEventListener("submit", simulateInvestment);
+            document.getElementById("export-pdf").addEventListener("click", exportToPDF);
+            document.getElementById("export-excel").addEventListener("click", exportToExcel);
+        });
+    </script>
+
+</body>
+</html>
